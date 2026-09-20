@@ -1,0 +1,9 @@
+noExplicitConstructor
+useStlAlgorithm
+cstyleCast
+unreadVariable
+constVariablePointer
+arrayIndexOutOfBounds
+shadowFunction
+duplicateConditionalAssign
+preprocessorErrorDirective

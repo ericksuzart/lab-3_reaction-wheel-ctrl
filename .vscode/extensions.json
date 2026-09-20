@@ -1,0 +1,10 @@
+{
+    // Veja http://go.microsoft.com/fwlink/?LinkId=827846
+    // para a documentação sobre o formato extensions.json
+    "recommendations": [
+        "platformio.platformio-ide"
+    ],
+    "unwantedRecommendations": [
+        "ms-vscode.cpptools-extension-pack"
+    ]
+}

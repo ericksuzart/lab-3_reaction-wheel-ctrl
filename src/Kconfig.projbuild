@@ -1,0 +1,40 @@
+menu "Configuração do Controlador por Volante de Inércia"
+
+    config GPIO_MAX_INDEX
+        int "Número máximo de GPIO para a placa alvo"
+        default 39 if IDF_TARGET_ESP32
+        default 48 if IDF_TARGET_ESP32S3
+
+    menu "Sistema"
+        config BLINK_GPIO
+            int "GPIO do LED de blink"
+            range 0 GPIO_MAX_INDEX
+            default 2 if IDF_TARGET_ESP32
+            help
+                Número do GPIO para o LED de status.
+    endmenu
+
+    menu "I2C"
+        config SDA_GPIO
+            int "GPIO SDA do I2C"
+            range 0 GPIO_MAX_INDEX
+            default 21 if IDF_TARGET_ESP32
+            help
+                GPIO da linha de dados serial do I2C.
+
+        config SCL_GPIO
+            int "GPIO SCL do I2C"
+            range 0 GPIO_MAX_INDEX
+            default 22 if IDF_TARGET_ESP32
+            help
+                GPIO da linha de clock serial do I2C.
+
+        config I2C_PORT_NUM
+            int "Número da porta I2C"
+            range 0 1
+            default 0 if IDF_TARGET_ESP32
+            help
+                Número da porta I2C a usar (0 ou 1 no ESP32).
+    endmenu
+
+endmenu

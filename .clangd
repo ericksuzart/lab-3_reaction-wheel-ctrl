@@ -1,0 +1,68 @@
+# .clangd configuration for ESP-IDF project
+
+CompileFlags:
+  Add:
+    - "-DESP_PLATFORM"
+    - "-DHAVE_CONFIG_H"
+    - "-D_GNU_SOURCE"
+    - "-std=gnu++17"
+  Remove:
+    # All -Werror* patterns
+    - "-Werror*"
+    - "-Wno-error*"
+    # All warning flags
+    - "-Wall"
+    - "-Wextra"
+    - "-Wno-enum-conversion"
+    - "-Wno-frame-address"
+    - "-Wno-sign-compare"
+    - "-Wno-unused-parameter"
+    - "-Wno-old-style-declaration"
+    # ESP-IDF GCC-specific
+    - "-fno-jump-tables"
+    - "-fno-shrink-wrap"
+    - "-fno-tree-switch-conversion"
+    - "-fstrict-volatile-bitfields"
+    - "-mlongcalls"
+    # All macro-prefix-map patterns  
+    - "-fmacro-prefix-map*"
+    # All data/function sections
+    - "-fdata-sections"
+    - "-ffunction-sections"
+    # Debug info
+    - "-gdwarf*"
+    - "-ggdb"
+    # Optimization  
+    - "-O*"
+    # Color
+    - "-fdiagnostics-color*"
+    # Builtin
+    - "-fno-builtin*"
+    # C++ specific
+    - "-fuse-cxa-atexit"
+    - "-fno-exceptions"
+    - "-fno-rtti"
+    # Misc
+    - "-fsyntax-only"
+    - "-mno-serialize*"
+    - "-fno-builtin-bzero"
+    - "-fno-builtin-memcpy"
+    - "-fno-builtin-memset"
+    - "-fno-builtin-stpcpy"
+    - "-fno-builtin-strncpy"
+    # Standard
+    - "-std=gnu++2b"
+
+Diagnostics:
+  UnusedIncludes: Strict
+  Suppress:
+    - pp_file_not_found
+    - bad_member_call
+
+InlayHints:
+  Enabled: Yes
+  ParameterNames: Yes
+  DeducedTypes: Yes
+
+Hover:
+  ShowAKA: Yes
