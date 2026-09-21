@@ -1,8 +1,8 @@
-# Controle por Volante de Inércia — Lab 3 (UFBA)
+# Controle por Volante de Inércia
 
-Projeto completo de um experimento de controle por volante de inércia (reaction wheel) desenvolvido no Lab 3 da UFBA: **modelo 3D**, **peças para impressão 3D**, **firmware** e **documentação** de referência.
+Projeto completo de um experimento de controle por volante de inércia (reaction wheel) desenvolvido na disciplina ENGG54 (LABORATÓRIO INTEGRADO III-A) da UFBA: **modelo 3D**, **peças para impressão 3D**, **firmware** e **documentação** de referência.
 
-O sistema consiste em um motor BLDC gimbal padrão 2805 acoplado a um volante de inércia impresso em 3D, com dois encoders magnéticos **AS5600** para leitura de ângulo (de forma analógica) e controle realizado por um **ESP32** (PlatformIO + ESP-IDF). O driver de referência é o [MKS DUAL FOC V3.1](docs/Schematic_MKS%20DUAL%20FOC%20V3.1.pdf), responsável pelo controle do motor.
+O sistema consiste em um motor BLDC gimbal padrão 2805 acoplado a um volante de inércia, com dois encoders magnéticos **AS5600** para leitura de ângulo (de forma analógica) e controle realizado por um **ESP32**. O driver de referência é o [MKS DUAL FOC V3.1](docs/Schematic_MKS%20DUAL%20FOC%20V3.1.pdf), responsável pelo controle direto do motor.
 
 ## Estrutura do repositório
 
@@ -34,8 +34,6 @@ Os pinos de GPIO e periféricos são configurados em `sdkconfig.defaults` e `src
 
 O container inclui o PlatformIO, a toolchain do ESP-IDF e todas as dependências de build. Nenhuma configuração manual é necessária.
 
-O container também tem acesso aos dispositivos seriais USB (regras udev já incluídas no Dockerfile), então gravação e monitor serial funcionam sem `--privileged`.
-
 ## Firmware
 
 Com o terminal do VS Code (dentro do dev container):
@@ -46,28 +44,11 @@ pio run
 
 # Gravar na placa
 pio run -t upload
-
-# Abrir monitor serial (115200 baud)
-pio device monitor
-
-# Verificar qualidade do código (clang-tidy + cppcheck)
-pio check
-
-# Gerar compile_commands.json para linting/intellisense da IDE
-pio run -t compiledb
 ```
-
-Alternativamente, use `scripts/regenerate_compiledb.sh` para regenerar o `compile_commands.json`.
 
 ## Modelo 3D
 
-O mecanismo é modelado em **FreeCAD** (`3d/modelo_3D.FCStd`). A montagem completa está disponível como um único arquivo `.3mf` (`3d/imprimir/peças.3mf`), pronto para impressão 3D.
-
-## Documentação e referências
-
-- `docs/belascuen2018.pdf` — artigo de referência sobre controle por volante de inércia
-- `docs/Schematic_MKS DUAL FOC V3.1.pdf` — esquema elétrico do driver de motor
-- `docs/as5600_encoder.jpg` e `docs/as5600_dist_to_mag.jpg` — referências de montagem do encoder AS5600 (distância entre o ímã e o chip)
+A estrutura física foi modelada no **FreeCAD** (`3d/modelo_3D.FCStd`). As peças estão disponíveis em `3d/imprimir/peças.3mf`, pronto para impressão 3D.
 
 ## Licença
 
