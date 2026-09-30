@@ -1,0 +1,211 @@
+# Pinout da placa MKS DUAL FOC V3.2 (Plus) com módulo Lolin32-Lite (ESP32 rev1).
+#
+# Fonte de verdade dos GPIOs: - netlist do módulo U2 (IO22 = M0_EN, IO12 =
+# M1_EN, IO15 = I_0, IO13 = I_1 etc.). MKS V3.2 usa os mesmos pinouts que a Deng
+# FOC 3.0. O nome de cada símbolo é a net do esquemático; o default é o pino
+# real da placa. Tabela completa, headers e restrições: README.md deste
+# componente.
+#
+# Pinos sem net na placa (livres para expansão): IO0, IO2 e IO4. IO6..IO11 são a
+# flash SPI interna do módulo. IO34..IO39 são somente entrada e já estão
+# ocupados pelo sensor de corrente.
+
+menu "MKS DUAL FOC V3.2 (pinout da placa)"
+
+	config GPIO_RANGE_MAX
+		int
+		default 39 if IDF_TARGET_ESP32
+		default 48 if IDF_TARGET_ESP32S3
+
+	# Motor 0: BLDCDriver3PWM(32, 33, 25, 22) nos exemplos oficiais
+	# (docs/MKS-DUALFOC/Test Code).
+	menu "Motor 0 (fases A0/B0/C0, conector P1)"
+
+		config M0_IN1_GPIO
+			int "M0_IN1 - fase A0, PWM A"
+			range 0 GPIO_RANGE_MAX
+			default 32
+			help
+				Net M0_IN1 (pino 6 do módulo U2, GPIO32). Fase A0 no
+				conector P1.
+
+		config M0_IN2_GPIO
+			int "M0_IN2 - fase B0, PWM B"
+			range 0 GPIO_RANGE_MAX
+			default 33
+			help
+				Net M0_IN2 (pino 7 do módulo U2, GPIO33). Fase B0 no
+				conector P1.
+
+		config M0_IN3_GPIO
+			int "M0_IN3 - fase C0, PWM C"
+			range 0 GPIO_RANGE_MAX
+			default 25
+			help
+				Net M0_IN3 (pino 8 do módulo U2, GPIO25). Fase C0 no
+				conector P1. Também é o pino DAC1 do ESP32.
+
+		config M0_EN_GPIO
+			int "M0_EN - enable do driver"
+			range 0 GPIO_RANGE_MAX
+			default 22
+			help
+				Net M0_EN (pino 15 do módulo U2, GPIO22). Tem pull-down
+				de 4.7 kOhm (RN2) e é também o LED onboard do
+				Lolin32-Lite - inutilizável como LED neste projeto.
+	endmenu
+
+	# Motor 1: BLDCDriver3PWM(26, 27, 14, 12) nos exemplos oficiais.
+	menu "Motor 1 (fases A1/B1/C1, conector P2)"
+
+		config M1_IN1_GPIO
+			int "M1_IN1 - fase A1, PWM A"
+			range 0 GPIO_RANGE_MAX
+			default 26
+			help
+				Net M1_IN1 (pino 9 do módulo U2, GPIO26). Fase A1 no
+				conector P2.
+
+		config M1_IN2_GPIO
+			int "M1_IN2 - fase B1, PWM B"
+			range 0 GPIO_RANGE_MAX
+			default 27
+			help
+				Net M1_IN2 (pino 10 do módulo U2, GPIO27). Fase B1 no
+				conector P2. Também é o pino DAC2 do ESP32.
+
+		config M1_IN3_GPIO
+			int "M1_IN3 - fase C1, PWM C"
+			range 0 GPIO_RANGE_MAX
+			default 14
+			help
+				Net M1_IN3 (pino 11 do módulo U2, GPIO14). Fase C1 no
+				conector P2.
+
+		config M1_EN_GPIO
+			int "M1_EN - enable do driver"
+			range 0 GPIO_RANGE_MAX
+			default 12
+			help
+				Net M1_EN (pino 12 do módulo U2, GPIO12). Tem pull-down
+				de 4.7 kOhm (RN2) e é pino de strapping (MTDI) - nível
+				baixo no boot altera a tensão da flash.
+	endmenu
+
+	# INA181A2 com shunt de 0.01 Ohm (ganho 50). Todos em ADC1 e somente
+	# entrada (sem saída, sem pull-up interno).
+	menu "Sensores de corrente (INA181A2)"
+
+		config M0_OUT1_CS_GPIO
+			int "M0_OUT1_CS - corrente da fase A0"
+			range 0 GPIO_RANGE_MAX
+			default 36
+			help
+				Net M0_OUT1_CS (pino 2 do módulo U2, GPIO36 / VP,
+				ADC1_CH0).
+
+		config M0_OUT2_CS_GPIO
+			int "M0_OUT2_CS - corrente da fase B0"
+			range 0 GPIO_RANGE_MAX
+			default 39
+			help
+				Net M0_OUT2_CS (pino 1 do módulo U2, GPIO39 / VN,
+				ADC1_CH3).
+
+		config M1_OUT1_CS_GPIO
+			int "M1_OUT1_CS - corrente da fase A1"
+			range 0 GPIO_RANGE_MAX
+			default 35
+			help
+				Net M1_OUT1_CS (pino 5 do módulo U2, GPIO35,
+				ADC1_CH7).
+
+		config M1_OUT2_CS_GPIO
+			int "M1_OUT2_CS - corrente da fase B1"
+			range 0 GPIO_RANGE_MAX
+			default 34
+			help
+				Net M1_OUT2_CS (pino 4 do módulo U2, GPIO34,
+				ADC1_CH6).
+	endmenu
+
+	# Os mesmos GPIOs alimentam o header do rádio RFM9x/RN2xx3. Pull-up de
+	# 4.7 kOhm nas quatro linhas (RN1).
+	menu "Barramentos I2C (header do rádio)"
+
+		config SDA_0_GPIO
+			int "SDA_0 - I2C porta 0 (MISO do RFM9x)"
+			range 0 GPIO_RANGE_MAX
+			default 19
+			help
+				Net SDA_0 (pino 16 do módulo U2, GPIO19). Pull-up de
+				4.7 kOhm (RN1).
+
+		config SCL_0_GPIO
+			int "SCL_0 - I2C porta 0 (CLK do RFM9x)"
+			range 0 GPIO_RANGE_MAX
+			default 18
+			help
+				Net SCL_0 (pino 18 do módulo U2, GPIO18). Pull-up de
+				4.7 kOhm (RN1).
+
+		config SDA_1_GPIO
+			int "SDA_1 - I2C porta 1 (MOSI do RFM9x)"
+			range 0 GPIO_RANGE_MAX
+			default 23
+			help
+				Net SDA_1 (pino 17 do módulo U2, GPIO23). Pull-up de
+				4.7 kOhm (RN1).
+
+		config SCL_1_GPIO
+			int "SCL_1 - I2C porta 1 (SEL do RFM9x)"
+			range 0 GPIO_RANGE_MAX
+			default 5
+			help
+				Net SCL_1 (pino 19 do módulo U2, GPIO5). Pull-up de
+				4.7 kOhm (RN1). É pino de strapping - nível baixo no
+				boot altera o modo do LOG.
+	endmenu
+
+	menu "UART do header"
+
+		config TXD_GPIO
+			int "TXD - UART TX"
+			range 0 GPIO_RANGE_MAX
+			default 17
+			help
+				Net TXD (pino 20 do módulo U2, GPIO17).
+
+		config RXD_GPIO
+			int "RXD - UART RX"
+			range 0 GPIO_RANGE_MAX
+			default 16
+			help
+				Net RXD (pino 21 do módulo U2, GPIO16).
+	endmenu
+
+	menu "Entradas analógicas do header"
+
+		config I_0_GPIO
+			int "I_0 - entrada analógica 0"
+			range 0 GPIO_RANGE_MAX
+			default 15
+			help
+				Net I_0 (pino 25 do módulo U2, GPIO15, ADC2_CH3).
+				Pull-up de 4.7 kOhm (RN2).
+
+				IO15 é pino de strapping (MTDO).
+
+		config I_1_GPIO
+			int "I_1 - entrada analógica 1"
+			range 0 GPIO_RANGE_MAX
+			default 13
+			help
+				Net I_1 (pino 26 do módulo U2, GPIO13, ADC2_CH4).
+				Pull-up de 4.7 kOhm (RN2).
+
+				Estas entradas são ADC2: o firmware não pode inicializar
+				Wi-Fi nem Bluetooth em nenhum caminho de código.
+	endmenu
+
+endmenu # MKS DUAL FOC V3.2 (pinout da placa)
