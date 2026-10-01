@@ -74,7 +74,7 @@
       "onAutoForward": "notify"
     }
   },
-  "initializeCommand": "${localWorkspaceFolder}/.devcontainer/initialize-command.sh",
+  "initializeCommand": "sh \"${localWorkspaceFolder}/.devcontainer/initialize-command.sh\"",
   "postCreateCommand": "${containerWorkspaceFolder}/.devcontainer/post-create-command.sh",
   "postAttachCommand": "${containerWorkspaceFolder}/.devcontainer/post-attach-command.sh",
   "features": {}

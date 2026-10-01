@@ -1,40 +1,43 @@
+# O pinout completo da placa MKS DUAL FOC V3.2 (todos os GPIOs, headers e
+# restrições elétricas) vive no componente components/mks_dual_foc_v32.
+#
+# Aqui só a ligação do projeto: LED de status e as saídas analógicas dos dois
+# AS5600.
+
 menu "Configuração do Controlador por Volante de Inércia"
 
-    config GPIO_MAX_INDEX
-        int "Número máximo de GPIO para a placa alvo"
-        default 39 if IDF_TARGET_ESP32
-        default 48 if IDF_TARGET_ESP32S3
-
     menu "Sistema"
+
         config BLINK_GPIO
-            int "GPIO do LED de blink"
-            range 0 GPIO_MAX_INDEX
-            default 2 if IDF_TARGET_ESP32
+            int "GPIO do LED de status"
+            range 0 39
+            default 2
             help
-                Número do GPIO para o LED de status.
+                GPIO do LED externo. IO2 é um dos GPIOs livres da placa; a
+                placa base não tem LED acionável por GPIO.
     endmenu
 
-    menu "I2C"
-        config SDA_GPIO
-            int "GPIO SDA do I2C"
-            range 0 GPIO_MAX_INDEX
-            default 21 if IDF_TARGET_ESP32
-            help
-                GPIO da linha de dados serial do I2C.
+    # Modo analógico do AS5600: a saída OUT (0-3.3 V) vai para um GPIO com ADC.
+    menu "Encoders magnéticos AS5600 (analógico)"
 
-        config SCL_GPIO
-            int "GPIO SCL do I2C"
-            range 0 GPIO_MAX_INDEX
-            default 22 if IDF_TARGET_ESP32
+        config ENCODER1_ADC_GPIO
+            int "GPIO analógico do encoder 1 (motor)"
+            range 0 39
+            default 13
             help
-                GPIO da linha de clock serial do I2C.
+                Net I_1 (ADC2_CH4), pino 12 do header H1. Ligue o OUT do
+                AS5600 do motor aqui, junto a GND e 3V3.
 
-        config I2C_PORT_NUM
-            int "Número da porta I2C"
-            range 0 1
-            default 0 if IDF_TARGET_ESP32
+        config ENCODER2_ADC_GPIO
+            int "GPIO analógico do encoder 2 (volante)"
+            range 0 39
+            default 15
             help
-                Número da porta I2C a usar (0 ou 1 no ESP32).
+                Net I_0 (ADC2_CH3), pino 11 do header H1. Ligue o OUT do
+                AS5600 do volante aqui.
+
+                IO15 é strapping (MTDO): a placa já tem pull-up de 4.7 kOhm
+                na net (RN2).
     endmenu
 
 endmenu

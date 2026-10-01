@@ -1,20 +1,7 @@
-GPIO_MAX_INDEX=39
-
-#
-# Sistema
-#
+# Led de status
 CONFIG_BLINK_GPIO=2
 
-#
-# I2C
-#
-CONFIG_SDA_GPIO=21
-CONFIG_SCL_GPIO=22
-CONFIG_I2C_PORT_NUM=0
-
-#
-# SPI
-#
-CONFIG_MISO_GPIO=19
-CONFIG_MOSI_GPIO=23
-CONFIG_SCLK_GPIO=18
+# AS5600 em modo analógico (saída OUT do sensor para nets do header H1).
+# Pinos ADC2: exigem firmware sem Wi-Fi/Bluetooth.
+CONFIG_ENCODER1_ADC_GPIO=13
+CONFIG_ENCODER2_ADC_GPIO=15
